@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   contentContainerWithTabBar: {
-    paddingBottom: 100,
+    paddingBottom: Platform.OS === 'android' ? 150 : 100, // Extra padding for floating tab bar
   },
   profileHeader: {
     alignItems: 'center',

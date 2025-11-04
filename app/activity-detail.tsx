@@ -20,7 +20,7 @@ export default function ActivityDetailScreen() {
   const { id } = useLocalSearchParams();
   const activity = mockActivities.find(a => a.id === id);
   const [isJoined, setIsJoined] = useState(false);
-
+	
   if (!activity) {
     return (
       <SafeAreaView style={commonStyles.container}>
