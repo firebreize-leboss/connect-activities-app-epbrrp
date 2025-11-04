@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   View,
@@ -32,10 +31,7 @@ export default function ProfileScreen() {
 
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={[
-          styles.contentContainer,
-          Platform.OS !== 'ios' && styles.contentContainerWithTabBar,
-        ]}
+        contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.profileHeader}>
@@ -111,10 +107,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
-  contentContainerWithTabBar: {
-    paddingBottom: Platform.OS === 'android' ? 150 : 100, // Extra padding for floating tab bar
+    paddingBottom: Platform.OS === 'ios' ? 100 : 100, // Padding uniforme pour iOS et Android
   },
   profileHeader: {
     alignItems: 'center',
@@ -207,6 +200,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 8,
+    marginBottom: 20, // Espace supplémentaire avant le bas
   },
   editButtonText: {
     fontSize: 16,
