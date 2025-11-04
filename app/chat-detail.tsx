@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   View,
@@ -16,10 +17,23 @@ import { IconSymbol } from '@/components/IconSymbol';
 import { colors, commonStyles } from '@/styles/commonStyles';
 import { mockChats, mockUser } from '@/data/mockData';
 
-// Messages adaptés selon le type de chat (groupe ou privé)
-const chatMessages: Record<string, any[]> = {
-  // Chat 1 - Hiking Group (GROUPE)
-  '1': [
+export default function ChatDetailScreen() {
+  const router = useRouter();
+  const { id } = useLocalSearchParams();
+  const chat = mockChats.find(c => c.id === id);
+  const [message, setMessage] = useState('');
+
+  if (!chat) {
+    return (
+      <SafeAreaView style={commonStyles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Chat not found</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const mockMessages = [
     {
       id: '1',
       senderId: '2',
@@ -52,179 +66,7 @@ const chatMessages: Record<string, any[]> = {
       text: 'Perfect! See you all tomorrow at 8am 👍',
       timestamp: '10:40 AM',
     },
-    {
-      id: '5',
-      senderId: '3',
-      senderName: 'Emma Wilson',
-      senderAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
-      text: 'Should we bring snacks?',
-      timestamp: '10:45 AM',
-    },
-  ],
-  
-  // Chat 2 - Sarah Johnson (PRIVÉ - 1 à 1)
-  '2': [
-    {
-      id: '1',
-      senderId: '4',
-      senderName: 'Sarah Johnson',
-      senderAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-      text: 'Hi! Thanks for joining the yoga class',
-      timestamp: '9:15 AM',
-    },
-    {
-      id: '2',
-      senderId: mockUser.id,
-      senderName: mockUser.name,
-      senderAvatar: mockUser.avatar,
-      text: 'Thank you for having me! It was great',
-      timestamp: '9:20 AM',
-    },
-    {
-      id: '3',
-      senderId: '4',
-      senderName: 'Sarah Johnson',
-      senderAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-      text: 'Would you like to join next week too?',
-      timestamp: '9:25 AM',
-    },
-    {
-      id: '4',
-      senderId: mockUser.id,
-      senderName: mockUser.name,
-      senderAvatar: mockUser.avatar,
-      text: 'Absolutely! Count me in 😊',
-      timestamp: '9:30 AM',
-    },
-  ],
-  
-  // Chat 3 - Alex Thompson (PRIVÉ - 1 à 1)
-  '3': [
-    {
-      id: '1',
-      senderId: '5',
-      senderName: 'Alex Thompson',
-      senderAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
-      text: 'Hey! Ready for the photography walk?',
-      timestamp: '2:00 PM',
-    },
-    {
-      id: '2',
-      senderId: mockUser.id,
-      senderName: mockUser.name,
-      senderAvatar: mockUser.avatar,
-      text: 'Yes! Just grabbing my camera',
-      timestamp: '2:05 PM',
-    },
-    {
-      id: '3',
-      senderId: '5',
-      senderName: 'Alex Thompson',
-      senderAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
-      text: 'Great! Meet at the bridge in 10 mins?',
-      timestamp: '2:07 PM',
-    },
-    {
-      id: '4',
-      senderId: mockUser.id,
-      senderName: mockUser.name,
-      senderAvatar: mockUser.avatar,
-      text: 'On my way! 📸',
-      timestamp: '2:08 PM',
-    },
-  ],
-  
-  // Chat 4 - Book Club (GROUPE)
-  '4': [
-    {
-      id: '1',
-      senderId: '6',
-      senderName: 'Chris Martinez',
-      senderAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
-      text: 'Book club meeting this Friday at 7pm',
-      timestamp: 'Yesterday',
-    },
-    {
-      id: '2',
-      senderId: mockUser.id,
-      senderName: mockUser.name,
-      senderAvatar: mockUser.avatar,
-      text: 'Thanks for the reminder!',
-      timestamp: 'Yesterday',
-    },
-    {
-      id: '3',
-      senderId: '7',
-      senderName: 'Lisa Wang',
-      senderAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400',
-      text: 'Looking forward to discussing the new chapter',
-      timestamp: 'Yesterday',
-    },
-    {
-      id: '4',
-      senderId: '8',
-      senderName: 'Tom Brown',
-      senderAvatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
-      text: 'I finished the book last night. So good!',
-      timestamp: 'Yesterday',
-    },
-    {
-      id: '5',
-      senderId: '6',
-      senderName: 'Chris Martinez',
-      senderAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
-      text: 'No spoilers please! 😄',
-      timestamp: 'Yesterday',
-    },
-  ],
-  
-  // Chat 5 - David Kim (PRIVÉ - 1 à 1)
-  '5': [
-    {
-      id: '1',
-      senderId: '8',
-      senderName: 'David Kim',
-      senderAvatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
-      text: 'Tennis match rescheduled to Sunday 3pm',
-      timestamp: '2 days ago',
-    },
-    {
-      id: '2',
-      senderId: mockUser.id,
-      senderName: mockUser.name,
-      senderAvatar: mockUser.avatar,
-      text: 'Works for me! See you then',
-      timestamp: '2 days ago',
-    },
-    {
-      id: '3',
-      senderId: '8',
-      senderName: 'David Kim',
-      senderAvatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
-      text: 'Great! I\'ll book the court',
-      timestamp: '2 days ago',
-    },
-  ],
-};
-
-export default function ChatDetailScreen() {
-  const router = useRouter();
-  const { id } = useLocalSearchParams();
-  const chat = mockChats.find(c => c.id === id);
-  const [message, setMessage] = useState('');
-
-  if (!chat) {
-    return (
-      <SafeAreaView style={commonStyles.container}>
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Chat not found</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  // Récupérer les messages pour ce chat spécifique
-  const messages = chatMessages[id as string] || [];
+  ];
 
   const handleSend = () => {
     if (message.trim()) {
@@ -266,60 +108,51 @@ export default function ChatDetailScreen() {
           contentContainerStyle={styles.messagesContent}
           showsVerticalScrollIndicator={false}
         >
-          {messages.length > 0 ? (
-            messages.map(msg => {
-              const isOwnMessage = msg.senderId === mockUser.id;
-              return (
+          {mockMessages.map(msg => {
+            const isOwnMessage = msg.senderId === mockUser.id;
+            return (
+              <View
+                key={msg.id}
+                style={[
+                  styles.messageWrapper,
+                  isOwnMessage && styles.messageWrapperOwn,
+                ]}
+              >
+                {!isOwnMessage && (
+                  <Image
+                    source={{ uri: msg.senderAvatar }}
+                    style={styles.messageAvatar}
+                  />
+                )}
                 <View
-                  key={msg.id}
                   style={[
-                    styles.messageWrapper,
-                    isOwnMessage && styles.messageWrapperOwn,
+                    styles.messageBubble,
+                    isOwnMessage && styles.messageBubbleOwn,
                   ]}
                 >
                   {!isOwnMessage && chat.isGroup && (
-                    <Image
-                      source={{ uri: msg.senderAvatar }}
-                      style={styles.messageAvatar}
-                    />
+                    <Text style={styles.senderName}>{msg.senderName}</Text>
                   )}
-                  <View
+                  <Text
                     style={[
-                      styles.messageBubble,
-                      isOwnMessage && styles.messageBubbleOwn,
+                      styles.messageText,
+                      isOwnMessage && styles.messageTextOwn,
                     ]}
                   >
-                    {!isOwnMessage && chat.isGroup && (
-                      <Text style={styles.senderName}>{msg.senderName}</Text>
-                    )}
-                    <Text
-                      style={[
-                        styles.messageText,
-                        isOwnMessage && styles.messageTextOwn,
-                      ]}
-                    >
-                      {msg.text}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.messageTime,
-                        isOwnMessage && styles.messageTimeOwn,
-                      ]}
-                    >
-                      {msg.timestamp}
-                    </Text>
-                  </View>
+                    {msg.text}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.messageTime,
+                      isOwnMessage && styles.messageTimeOwn,
+                    ]}
+                  >
+                    {msg.timestamp}
+                  </Text>
                 </View>
-              );
-            })
-          ) : (
-            <View style={styles.emptyMessages}>
-              <Text style={styles.emptyMessagesText}>No messages yet</Text>
-              <Text style={styles.emptyMessagesSubtext}>
-                Start the conversation!
-              </Text>
-            </View>
-          )}
+              </View>
+            );
+          })}
         </ScrollView>
 
         <View style={styles.inputContainer}>
@@ -488,21 +321,5 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 18,
     color: colors.text,
-  },
-  emptyMessages: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 100,
-  },
-  emptyMessagesText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.text,
-    marginBottom: 8,
-  },
-  emptyMessagesSubtext: {
-    fontSize: 14,
-    color: colors.textSecondary,
   },
 });
